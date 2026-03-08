@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var flash = require('express-flash');
+var session = require('express-session');
+
 var mbgRouter = require('./routes/mbg');
 var kipkRouter = require('./routes/kipk');
 var kategoriRouter = require('./routes/kategori');
@@ -22,6 +25,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  cookie: {
+    maxAge: 6000
+  },
+  store: new session.MemoryStore,
+  saveUnitialized: true,
+  resave  : 'true',
+  secret: 'secret'
+}))
+app.use(flash());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
